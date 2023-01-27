@@ -1,4 +1,5 @@
 # aerospike-cli
+[![Build](https://github.com/reugn/aerospike-cli/actions/workflows/build.yml/badge.svg)](https://github.com/reugn/aerospike-cli/actions/workflows/build.yml)
 
 A command line utility to query the Aerospike database using SQL.  
 This tool wraps the [Aerospike JDBC driver](https://github.com/aerospike/aerospike-jdbc) and is written in Kotlin.
@@ -11,7 +12,7 @@ This tool wraps the [Aerospike JDBC driver](https://github.com/aerospike/aerospi
 ```
 ./gradlew clean build
 ```
-* Download an executable jar from the releases
+* Download an executable jar from the [releases](https://github.com/reugn/aerospike-cli/releases)
 
 ## Usage
 ```
