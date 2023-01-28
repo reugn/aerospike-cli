@@ -4,9 +4,9 @@ import java.sql.DriverManager
 import java.sql.ResultSetMetaData
 
 class AerospikeSession(
-    host: String,
-    port: Int,
-    namespace: String,
+    val host: String,
+    val port: Int,
+    val namespace: String,
     urlOpts: String
 ) : AutoCloseable {
 
@@ -46,7 +46,7 @@ class AerospikeSession(
             val row = (0 until resultSetMetaData.columnCount)
                 .map {
                     val columnName: String? = columnNames[it]
-                    columnName?.let { s -> resultSet.getString(s) } ?: "null"
+                    columnName?.let { s -> resultSet.getObject(s)?.toString() } ?: "null"
                 }
                 .toList()
             result.add(row)
@@ -93,7 +93,7 @@ class AerospikeSession(
         val result = mutableListOf<List<String>>()
         result.add(listOf("Column", "Type"))
         for (i in 1 until metaData.columnCount) {
-            result.add(listOf(metaData.getColumnName(i), metaData.getColumnTypeName(i)))
+            result.add(listOf(metaData.getColumnName(i), metaData.getColumnTypeName(i) ?: ""))
         }
         resultSet?.close()
         statement?.close()
