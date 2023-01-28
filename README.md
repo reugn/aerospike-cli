@@ -35,6 +35,9 @@ java -jar build/libs/aerospike-cli-<version>-standalone.jar -ns test
 ```
 Read more about optional [configuration parameters](https://github.com/aerospike/aerospike-jdbc/blob/main/docs/params.md).
 
+### Create UNIX executable
+Read how to create a [UNIX executable from an executable jar](https://skife.org/java/unix/2011/06/20/really_executable_jars.html) file.
+
 ## Supported SQL Statements
 See the [Aerospike JDBC Supported Statements](https://github.com/aerospike/aerospike-jdbc/blob/main/docs/examples.md)
 page for query examples.

@@ -13,11 +13,18 @@ repositories {
     mavenCentral()
 }
 
+extra["jlineVersion"] = "3.22.0"
+extra["slf4jVersion"] = "2.0.6"
+
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.5")
     implementation("com.aerospike:aerospike-jdbc:1.7.0")
-    implementation("org.slf4j:slf4j-api:2.0.6")
-    implementation("org.slf4j:slf4j-nop:2.0.6")
+    implementation("org.jline:jline-console:${project.extra["jlineVersion"]}")
+    implementation("org.jline:jline-reader:${project.extra["jlineVersion"]}")
+    implementation("org.jline:jline-terminal:${project.extra["jlineVersion"]}")
+    runtimeOnly("org.jline:jline-terminal-jna:${project.extra["jlineVersion"]}")
+    implementation("org.slf4j:slf4j-api:${project.extra["slf4jVersion"]}")
+    implementation("org.slf4j:slf4j-nop:${project.extra["slf4jVersion"]}")
     testImplementation(kotlin("test"))
 }
 

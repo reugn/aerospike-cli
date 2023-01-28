@@ -1,10 +1,5 @@
 package io.github.reugn.aerospike.cli
 
-import io.github.reugn.aerospike.cli.ANSICode.BRIGHT_BLACK
-import io.github.reugn.aerospike.cli.ANSICode.BRIGHT_RED
-import io.github.reugn.aerospike.cli.ANSICode.applyCodes
-import io.github.reugn.aerospike.cli.Format.rowsNumber
-import io.github.reugn.aerospike.cli.Format.toTable
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.default
@@ -12,9 +7,7 @@ import java.util.logging.Level
 import java.util.logging.LogManager
 import java.util.logging.Logger
 import kotlin.system.exitProcess
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main(args: Array<String>) {
@@ -42,31 +35,18 @@ fun main(args: Array<String>) {
     if (version) showVersionAndExit()
 
     val aerospikeSession = AerospikeSession(host, port, namespace, options)
+    val terminal = Terminal()
 
-    do {
-        print("$host:$port/$namespace> ".applyCodes(BRIGHT_BLACK))
-        val cmd = readln().trim()
-        if (cmd.isNotEmpty() && !exitCommand(cmd)) {
-            val result = try {
-                val (resultSet: List<List<String>>, duration: Duration) = measureTimedValue {
-                    aerospikeSession.execute(cmd)
-                }
-                "${resultSet.toTable()}\n${resultSet.rowsNumber()} ${duration.inWholeMicroseconds / 1000.0}ms"
-            } catch (e: Exception) {
-                e.message?.applyCodes(BRIGHT_RED)
-            }
-            println(result)
+    val app = AerospikeCli(aerospikeSession, terminal)
+
+    Runtime.getRuntime().addShutdownHook(object : Thread() {
+        override fun run() {
+            app.close()
         }
-    } while (!exitCommand(cmd))
+    })
 
-    println("Exiting ${BuildConfig.APP_NAME}...")
-    aerospikeSession.close()
+    app.run()
     exitProcess(0)
-}
-
-fun exitCommand(cmd: String): Boolean {
-    return cmd.equals("quit", ignoreCase = true)
-            || cmd.equals("exit", ignoreCase = true)
 }
 
 fun showVersionAndExit() {
